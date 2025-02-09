@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: "Arreglos",
-    url: "/arrangements",
+    url: "/repairs",
     icon: Calendar,
   },
   {
