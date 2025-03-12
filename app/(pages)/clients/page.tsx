@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { ClientTable } from "./sections/ClientsTable";
-import { AddClientModal } from "./sections/AddClientModal";
-import { EditClientModal } from "./sections/EditClientModal";
 
 async function getClients() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/clients`, {
