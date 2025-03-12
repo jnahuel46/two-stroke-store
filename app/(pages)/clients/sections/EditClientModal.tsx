@@ -14,7 +14,7 @@ interface EditClientModalProps {
   client: Client | null
 }
 
-export function EditClientModal({ isOpen, onClose, onEdit, client }: EditClientModalProps) {
+export function EditClientModal({ isOpen, onClose, client }: EditClientModalProps) {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
@@ -25,15 +25,15 @@ export function EditClientModal({ isOpen, onClose, onEdit, client }: EditClientM
       setName(client.name)
       setPhone(client.phone)
       setEmail(client.email)
-      setRepairs(client.repairs)
+      // setRepairs(client.repairs)
     }
   }, [client])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (client) {
-      onEdit({ ...client, name, phone, email, repairs })
-    }
+    // if (client) {
+    //   onEdit({ ...client, name, phone, email, repairs })
+    // }
     onClose()
   }
 

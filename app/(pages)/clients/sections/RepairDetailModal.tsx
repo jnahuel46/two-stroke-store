@@ -25,26 +25,7 @@ export function RepairDetailsModal({
   onClose,
   client,
 }: RepairDetailsModalProps) {
-  const repairDetails: RepairDetail[] = [
-    {
-      type: "Pantalla",
-      status: "Completado",
-      budget: "$100",
-      description: "Reemplazo de pantalla",
-    },
-    {
-      type: "Batería",
-      status: "En progreso",
-      budget: "$50",
-      description: "Cambio de batería",
-    },
-    {
-      type: "Software",
-      status: "Pendiente",
-      budget: "$30",
-      description: "Actualización de sistema",
-    },
-  ];
+  const repairDetails: RepairDetail[] = client?.repairs || [];
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
