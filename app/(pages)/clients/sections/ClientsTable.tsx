@@ -45,7 +45,7 @@ export function ClientTable({ clients }: ClientTableProps) {
               <TableCell>{client.phone}</TableCell>
               <TableCell>
                 <Button variant="link" onClick={() => handleOpenModal(client)}>
-                  {client.repairs.length || 0}
+                  {client?.repairs?.length || 0}
                 </Button>
               </TableCell>
               <TableCell>{client.email}</TableCell>
