@@ -1,143 +1,19 @@
 import { RepairsTable } from "./sections/RepairsTable";
 
-export default function RepairsPage() {
-  const repairs = [
-    {
-      id: 1,
-      type: "Pantalla",
-      status: "Completado",
-      budget: "$100",
-      description: "Reemplazo de pantalla",
-      clientId: 1,
-      clientName: "John Doe",
-    },
-    {
-      id: 2,
-      type: "Batería",
-      status: "En progreso",
-      budget: "$50",
-      description: "Cambio de batería",
-      clientId: 1,
-      clientName: "John Doe",
-    },
-    {
-      id: 3,
-      type: "Software",
-      status: "Pendiente",
-      budget: "$30",
-      description: "Actualización de sistema",
-      clientId: 2,
-      clientName: "Jane Smith",
-    },
-    {
-      id: 4,
-      type: "Cámara",
-      status: "Completado",
-      budget: "$80",
-      description: "Reemplazo de cámara frontal",
-      clientId: 3,
-      clientName: "Alice Johnson",
-    },
-    {
-      id: 5,
-      type: "Micrófono",
-      status: "En progreso",
-      budget: "$40",
-      description: "Reparación de micrófono",
-      clientId: 3,
-      clientName: "Alice Johnson",
-    },
-    {
-      id: 6,
-      type: "Altavoz",
-      status: "Completado",
-      budget: "$60",
-      description: "Reemplazo de altavoz",
-      clientId: 3,
-      clientName: "Alice Johnson",
-    },
-    {
-      id: 7,
-      type: "Conector de carga",
-      status: "Pendiente",
-      budget: "$70",
-      description: "Reemplazo de conector USB",
-      clientId: 5,
-      clientName: "Charlie Brown",
-    },
-    {
-      id: 8,
-      type: "Botones",
-      status: "En progreso",
-      budget: "$45",
-      description: "Reparación de botones laterales",
-      clientId: 5,
-      clientName: "Charlie Brown",
-    },
-    {
-      id: 9,
-      type: "Pantalla",
-      status: "Completado",
-      budget: "$110",
-      description: "Reemplazo de pantalla OLED",
-      clientId: 6,
-      clientName: "Diana Ross",
-    },
-    {
-      id: 10,
-      type: "Batería",
-      status: "Completado",
-      budget: "$55",
-      description: "Reemplazo de batería",
-      clientId: 7,
-      clientName: "Edward Norton",
-    },
-    {
-      id: 11,
-      type: "Software",
-      status: "En progreso",
-      budget: "$35",
-      description: "Eliminación de malware",
-      clientId: 7,
-      clientName: "Edward Norton",
-    },
-    {
-      id: 12,
-      type: "Carcasa",
-      status: "Pendiente",
-      budget: "$90",
-      description: "Reemplazo de carcasa trasera",
-      clientId: 7,
-      clientName: "Edward Norton",
-    },
-    {
-      id: 13,
-      type: "Antena",
-      status: "Completado",
-      budget: "$65",
-      description: "Reparación de antena WiFi",
-      clientId: 7,
-      clientName: "Edward Norton",
-    },
-    {
-      id: 14,
-      type: "Pantalla",
-      status: "En progreso",
-      budget: "$120",
-      description: "Reemplazo de pantalla y digitalizador",
-      clientId: 8,
-      clientName: "Fiona Apple",
-    },
-    {
-      id: 15,
-      type: "Cámara",
-      status: "Pendiente",
-      budget: "$75",
-      description: "Reemplazo de cámara trasera",
-      clientId: 8,
-      clientName: "Fiona Apple",
-    },
-  ];
+async function getRepairs() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs`, {
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch repairs");
+  }
+
+  return res.json();
+}
+
+export default async function RepairsPage() {
+  const repairs = await getRepairs();
 
   return (
     <div className="mt-12">

@@ -2,7 +2,7 @@ export interface Client {
   id: number;
   name: string;
   phone: string;
-  repairs: Repair[];
+  repairs?: Repair[];
   email: string;
 }
 
@@ -20,5 +20,5 @@ export interface Repair {
   budget: string;
   description: string;
   clientId: number;
-  clientName: string;
+  client: Client;
 }

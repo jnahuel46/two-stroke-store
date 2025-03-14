@@ -33,7 +33,7 @@ export function RepairsTable({ repairs }: RepairsTableProps) {
               <TableCell>{repair.status}</TableCell>
               <TableCell>{repair.budget}</TableCell>
               <TableCell>{repair.description}</TableCell>
-              <TableCell>{repair.clientName}</TableCell>
+              <TableCell>{repair.client.name}</TableCell>
             </TableRow>
           ))}
         </TableBody>
