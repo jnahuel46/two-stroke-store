@@ -1,23 +1,20 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import { RepairsTable } from "./sections/RepairsTable";
+import { getRepairs } from "@/app/services/repairs";
+import { Skeleton } from "@/components/ui/skeleton";
 
-async function getRepairs() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs`, {
-    cache: "no-cache",
+export default function RepairsPage() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["repairs"],
+    queryFn: getRepairs,
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch repairs");
-  }
-
-  return res.json();
-}
-
-export default async function RepairsPage() {
-  const repairs = await getRepairs();
-
+  if (isLoading) return <Skeleton  className="w-full h-[200px]"/>;
+  if (error) return <p>Error</p>;
   return (
     <div className="mt-12">
-      <RepairsTable repairs={repairs} />
+      <RepairsTable repairs={data} />
     </div>
   );
 }
