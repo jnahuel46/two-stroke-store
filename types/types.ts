@@ -7,6 +7,7 @@ export interface Client {
 }
 
 export interface RepairDetail {
+  id: number;
   type: string;
   status: string;
   budget: string;

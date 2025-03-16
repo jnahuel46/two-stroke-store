@@ -36,7 +36,6 @@ export function EditClientModal({
       setName(client.name);
       setPhone(client.phone);
       setEmail(client.email);
-      // setRepairs(client.repairs)
     }
   }, [client]);
 

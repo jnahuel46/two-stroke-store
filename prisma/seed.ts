@@ -13,13 +13,13 @@ async function main() {
         create: [
           {
             type: "Screen Replacement",
-            status: "Pending",
+            status: "Pendiente",
             budget: "150 USD",
             description: "Cracked screen needs replacement.",
           },
           {
             type: "Battery Replacement",
-            status: "Completed",
+            status: "Completado",
             budget: "80 USD",
             description: "Battery is not holding charge.",
           },
@@ -38,19 +38,19 @@ async function main() {
         create: [
           {
             type: "Software Update",
-            status: "In Progress",
+            status: "En Progreso",
             budget: "50 USD",
             description: "Updating to the latest OS version.",
           },
           {
             type: "Charging Port Repair",
-            status: "Completed",
+            status: "Completado",
             budget: "100 USD",
             description: "Charging port is loose.",
           },
           {
             type: "Camera Replacement",
-            status: "Pending",
+            status: "Pendiente",
             budget: "120 USD",
             description: "Camera is blurry.",
           },
@@ -69,7 +69,7 @@ async function main() {
         create: [
           {
             type: "Water Damage Repair",
-            status: "Completed",
+            status: "Completado",
             budget: "200 USD",
             description: "Device was exposed to water.",
           },
@@ -88,13 +88,13 @@ async function main() {
         create: [
           {
             type: "Speaker Repair",
-            status: "In Progress",
+            status: "En Progreso",
             budget: "70 USD",
             description: "Speaker is not working properly.",
           },
           {
             type: "Button Repair",
-            status: "Completed",
+            status: "Completado",
             budget: "60 USD",
             description: "Power button is stuck.",
           },
@@ -113,19 +113,19 @@ async function main() {
         create: [
           {
             type: "Data Recovery",
-            status: "Pending",
+            status: "Pendiente",
             budget: "250 USD",
             description: "Attempting to recover lost data.",
           },
           {
             type: "Motherboard Repair",
-            status: "In Progress",
+            status: "En Progreso",
             budget: "300 USD",
             description: "Diagnosing motherboard issue.",
           },
           {
             type: "Antenna Repair",
-            status: "Completed",
+            status: "Completado",
             budget: "90 USD",
             description: "Weak Signal strenght.",
           },
@@ -134,7 +134,7 @@ async function main() {
     },
   });
 
-  console.log("Seeding completed!");
+  console.log("Seeding Completado!");
 }
 
 main()

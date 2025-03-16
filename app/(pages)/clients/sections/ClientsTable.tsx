@@ -12,12 +12,16 @@ import { Trash2, Edit } from "lucide-react";
 import { useState } from "react";
 import { Client } from "@/types/types";
 import { RepairDetailsModal } from "./RepairDetailModal";
-import { useQuery } from "@tanstack/react-query";
-import { getClients } from "@/app/services/clients";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { editClient, getClients } from "@/app/services/clients";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EditClientModal } from "./EditClientModal";
+import { DeleteClientModal } from "./DeleteClientModal";
+import { toast } from "sonner";
 
 export function ClientTable() {
+  const queryClient = useQueryClient(); // Usa useQueryClient en lugar de crear un nuevo QueryClient
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["clients"],
     queryFn: getClients,
@@ -28,6 +32,7 @@ export function ClientTable() {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const handleOpenRepairModal = (client: Client) => {
     setSelectedClient(client);
@@ -39,9 +44,31 @@ export function ClientTable() {
     setIsEditModalOpen(true);
   };
 
-  const handleEditModal = (client: Client) => {
-    console.log("Editando cliente", client);
+  const handleOpenDeleteModal = (client: Client) => {
+    setSelectedClient(client);
+    setIsDeleteModalOpen(true);
   };
+
+  const editMutation = useMutation({
+    mutationFn: editClient,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      setIsEditModalOpen(false);
+      toast.success("Cliente editar con éxito", {
+        description: `Nombre: ${data.name}, Email: ${data.email}`,
+      });
+    },
+    onError: (error) => {
+      toast.error("Error al editar cliente", {
+        description: `Error al editar cliente: ${error}`,
+      });
+    },
+  });
+
+  const handleEditClient = (client: Client) => {
+    editMutation.mutate(client);
+  };
+
 
   if (isLoading) return <Skeleton className="w-full h-[200px]" />;
   if (error) return <p>Error</p>;
@@ -64,16 +91,27 @@ export function ClientTable() {
               <TableCell>{client.name}</TableCell>
               <TableCell>{client.phone}</TableCell>
               <TableCell>
-                <Button variant="link" onClick={() => handleOpenRepairModal(client)}>
+                <Button
+                  variant="link"
+                  onClick={() => handleOpenRepairModal(client)}
+                >
                   {client?.repairs?.length || 0}
                 </Button>
               </TableCell>
               <TableCell>{client.email}</TableCell>
               <TableCell className="flex gap-2">
-                <Button variant="ghost" size="icon" onClick={() => handleOpenEditModal(client)}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleOpenEditModal(client)}
+                >
                   <Edit className="w-5 h-5 text-blue-500" />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleOpenDeleteModal(client)}
+                >
                   <Trash2 className="w-5 h-5 text-red-500" />
                 </Button>
               </TableCell>
@@ -94,7 +132,14 @@ export function ClientTable() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         client={selectedClient}
-        onEdit={handleEditModal}
+        onEdit={handleEditClient}
+      />
+
+      {/* Modal de eliminación de cliente */}
+      <DeleteClientModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        client={selectedClient}
       />
     </>
   );

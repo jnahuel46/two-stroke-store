@@ -40,10 +40,6 @@ export default function ClientManagement() {
       <h1 className="text-2xl font-bold mb-4">Gestión de Clientes</h1>
       <div className="mb-4 space-x-2">
         <Button onClick={() => setIsModalAddOpen(true)}>Añadir Cliente</Button>
-        <Button disabled>Editar Cliente</Button>
-        <Button disabled variant="destructive">
-          Eliminar Cliente
-        </Button>
       </div>
       <ClientTable />
       <AddClientModal

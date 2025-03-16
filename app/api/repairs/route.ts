@@ -19,3 +19,48 @@ export async function GET() {
     await prisma.$disconnect();
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json();
+
+    // Validación básica de datos
+    if (!body.id) {
+      return NextResponse.json({ error: 'ID es requerido' }, { status: 400 });
+    }
+
+    // Verificar si el cliente existe
+    const existingRepair = await prisma.repair.findFirst({
+      where: {
+        id: body.id,
+      },
+    });
+
+    if (!existingRepair) {
+      return NextResponse.json({ error: 'El arreglo no existe' }, { status: 404 });
+    }
+
+    // Actualización del cliente
+    const repair = await prisma.repair.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        type: body.type,
+        status: body.status,
+        budget: body.budget,
+        description: body.description,
+      },
+      include: {
+        client: true, // Incluye la información del cliente relacionado
+      },
+    });
+
+    return NextResponse.json(repair);
+  } catch (error) {
+    console.error('Error al editar el arreglo:', error);
+    return NextResponse.json({ error: 'Error al editar el arreglo' }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
