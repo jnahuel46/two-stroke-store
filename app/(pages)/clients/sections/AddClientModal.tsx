@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Client } from "@/types/types";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface AddClientModalProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export function AddClientModal({ isOpen, onClose, onAdd }: AddClientModalProps) 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Añadir Nuevo Cliente</DialogTitle>
+          <DialogDescription>Completa los campos para agregar un cliente.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
