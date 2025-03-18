@@ -7,11 +7,12 @@ export interface Client {
 }
 
 export interface RepairDetail {
-  id: number;
+  id?: number;
   type: string;
   status: string;
   budget: string;
   description: string;
+  clientId: number;
 }
 
 export interface Repair {

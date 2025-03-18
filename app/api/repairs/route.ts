@@ -64,3 +64,46 @@ export async function PATCH(req: Request) {
     await prisma.$disconnect();
   }
 }
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+
+    // Validación básica de datos
+    if (!body.clientId) {
+      return NextResponse.json({ error: 'ID de cliente es requerido' }, { status: 400 });
+    }
+
+    // Verificar si el cliente existe
+    const existingClient = await prisma.client.findFirst({
+      where: {
+        id: body.clientId,
+      },
+    });
+
+    if (!existingClient) {
+      return NextResponse.json({ error: 'El cliente no existe' }, { status: 404 });
+    }
+
+    // Creación del arreglo
+    const repair = await prisma.repair.create({
+      data: {
+        type: body.type,
+        status: body.status,
+        budget: body.budget,
+        description: body.description,
+        clientId: body.clientId,
+      },
+      include: {
+        client: true, // Incluye la información del cliente relacionado
+      },
+    });
+
+    return NextResponse.json(repair, { status: 201 });
+  } catch (error) {
+    console.error('Error al crear el arreglo:', error);
+    return NextResponse.json({ error: 'Error al crear el arreglo' }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}

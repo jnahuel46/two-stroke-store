@@ -102,13 +102,7 @@ export function RepairDetailsModal({
                       name={`repairs.${index}.id`}
                       control={control}
                       defaultValue={repair.id}
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          readOnly
-                          className="w-[40px] p-0 border-none"
-                        />
-                      )}
+                      render={() => <p className="w-[40px] p-0">{repair.id}</p>}
                     />
                   </TableCell>
 
@@ -119,11 +113,7 @@ export function RepairDetailsModal({
                       control={control}
                       defaultValue={repair.type}
                       render={({ field }) => (
-                        <Textarea
-                          {...field}
-                          className="w-36"
-                          readOnly // O cambia a 'disabled' si lo prefieres
-                        />
+                        <Textarea {...field} className="w-36" readOnly />
                       )}
                     />
                   </TableCell>
@@ -165,7 +155,6 @@ export function RepairDetailsModal({
                       render={({ field }) => (
                         <Input
                           {...field}
-                          readOnly
                           className="w-[50px] p-0 border-none"
                         />
                       )}
@@ -179,7 +168,7 @@ export function RepairDetailsModal({
                       control={control}
                       defaultValue={repair.description}
                       render={({ field }) => (
-                        <Textarea {...field} className="w-42" readOnly />
+                        <Textarea {...field} className="w-42" />
                       )}
                     />
                   </TableCell>

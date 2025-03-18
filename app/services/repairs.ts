@@ -29,3 +29,22 @@ export const editRepair = async (repair: RepairDetail) => {
   }
   return response.json();
 };
+
+export const addRepair = async (repair: RepairDetail) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(repair),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json(); // Captura el mensaje del backend
+    throw new Error(errorData.error || "Error al agregar el arreglo");
+  }
+  return response.json();
+}

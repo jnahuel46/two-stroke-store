@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit } from "lucide-react";
+import { Trash2, Edit, Plus } from "lucide-react";
 import { useState } from "react";
 import { Client } from "@/types/types";
 import { RepairDetailsModal } from "./RepairDetailModal";
@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EditClientModal } from "./EditClientModal";
 import { DeleteClientModal } from "./DeleteClientModal";
 import { toast } from "sonner";
+import { AddRepairModal } from "./AddRepairModal";
 
 export function ClientTable() {
   const queryClient = useQueryClient(); // Usa useQueryClient en lugar de crear un nuevo QueryClient
@@ -33,6 +34,7 @@ export function ClientTable() {
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isAddRepairModalOpen, setIsAddRepairModalOpen] = useState(false);
 
   const handleOpenRepairModal = (client: Client) => {
     setSelectedClient(client);
@@ -47,6 +49,11 @@ export function ClientTable() {
   const handleOpenDeleteModal = (client: Client) => {
     setSelectedClient(client);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleOpenAddRepairModal = (client: Client) => {
+    setSelectedClient(client);
+    setIsAddRepairModalOpen(true);
   };
 
   const editMutation = useMutation({
@@ -68,7 +75,6 @@ export function ClientTable() {
   const handleEditClient = (client: Client) => {
     editMutation.mutate(client);
   };
-
 
   if (isLoading) return <Skeleton className="w-full h-[200px]" />;
   if (error) return <p>Error</p>;
@@ -100,6 +106,13 @@ export function ClientTable() {
               </TableCell>
               <TableCell>{client.email}</TableCell>
               <TableCell className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleOpenAddRepairModal(client)}
+                >
+                  <Plus className="w-5 h-5 text-green-500" />
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -139,6 +152,12 @@ export function ClientTable() {
       <DeleteClientModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
+        client={selectedClient}
+      />
+
+      <AddRepairModal
+        isOpen={isAddRepairModalOpen}
+        onClose={() => setIsAddRepairModalOpen(false)}
         client={selectedClient}
       />
     </>
