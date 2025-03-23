@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ScheduleRepairs } from "./sections/ScheduleRepairs";
 
 export default function OverviewPage() {
   return (
@@ -18,6 +19,7 @@ export default function OverviewPage() {
           height={400}
           priority
         />
+        <ScheduleRepairs />
       </main>
     </div>
   );

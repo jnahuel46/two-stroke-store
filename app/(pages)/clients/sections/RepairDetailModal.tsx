@@ -91,7 +91,7 @@ export function RepairDetailsModal({
                 <TableHead>Estado</TableHead>
                 <TableHead>Presupuesto</TableHead>
                 <TableHead>Descripción</TableHead>
-                <TableHead>Fecha Entrega</TableHead>
+                <TableHead>Fecha Revision</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

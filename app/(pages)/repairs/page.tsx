@@ -14,7 +14,7 @@ export default function RepairsPage() {
   if (error) return <p>Error</p>;
   return (
     <div className="mt-12">
-      <RepairsTable repairs={data} />
+      <RepairsTable repairs={data} title="Tabla de Arreglos"/>
     </div>
   );
 }
