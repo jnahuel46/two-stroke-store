@@ -12,20 +12,22 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model Client {
-  id       Int      @id @default(autoincrement())
-  name     String
-  phone    String
-  email    String
-  repairs  Repair[]
+  id      Int      @id @default(autoincrement())
+  name    String
+  phone   String
+  email   String
+  repairs Repair[]
 }
 
 model Repair {
-  id          Int     @id @default(autoincrement())
-  type        String
-  status      String
-  budget      String
-  description String
-  clientId    Int
-  client      Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  id             Int     @id @default(autoincrement())
+  type           String
+  status         String
+  budget         String
+  description    String
+  clientId       Int
+  client         Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  threshold_date String?
 }

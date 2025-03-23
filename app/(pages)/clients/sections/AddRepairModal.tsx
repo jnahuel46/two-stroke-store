@@ -29,6 +29,7 @@ export function AddRepairModal({
   const [type, setType] = useState("");
   const [budget, setBudget] = useState("");
   const [description, setDescription] = useState("");
+  const [threshold_date, setThreshold] = useState("");
 
   const createMutation = useMutation({
     mutationFn: addRepair,
@@ -52,6 +53,7 @@ export function AddRepairModal({
       budget: budget,
       description,
       clientId: client.id,
+      threshold_date: threshold_date
     });
   };
 
@@ -79,6 +81,11 @@ export function AddRepairModal({
           placeholder="Descripción"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+        />
+        <Input
+          placeholder="Fecha de Entrega"
+          value={threshold_date}
+          onChange={(e) => setThreshold(e.target.value)}
         />
         <Button onClick={handleCreate}>Crear</Button>
       </DialogContent>

@@ -91,6 +91,7 @@ export function RepairDetailsModal({
                 <TableHead>Estado</TableHead>
                 <TableHead>Presupuesto</TableHead>
                 <TableHead>Descripción</TableHead>
+                <TableHead>Fecha Entrega</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -169,6 +170,20 @@ export function RepairDetailsModal({
                       defaultValue={repair.description}
                       render={({ field }) => (
                         <Textarea {...field} className="w-42" />
+                      )}
+                    />
+                  </TableCell>
+                   {/* Columna Presupuesto */}
+                  <TableCell>
+                    <Controller
+                      name={`repairs.${index}.threshold_date`}
+                      control={control}
+                      defaultValue={repair.threshold_date}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          className="w-[75px] p-0 border-none"
+                        />
                       )}
                     />
                   </TableCell>

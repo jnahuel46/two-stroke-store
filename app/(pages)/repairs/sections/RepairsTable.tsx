@@ -24,6 +24,7 @@ export function RepairsTable({ repairs }: RepairsTableProps) {
             <TableHead>Presupuesto</TableHead>
             <TableHead>Descripción</TableHead>
             <TableHead>Cliente</TableHead>
+            <TableHead>Fecha De Entrega</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -34,6 +35,7 @@ export function RepairsTable({ repairs }: RepairsTableProps) {
               <TableCell>{repair.budget}</TableCell>
               <TableCell>{repair.description}</TableCell>
               <TableCell>{repair.client.name}</TableCell>
+              <TableCell>{repair.threshold_date}</TableCell>
             </TableRow>
           ))}
         </TableBody>

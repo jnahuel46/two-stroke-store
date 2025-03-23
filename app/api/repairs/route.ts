@@ -50,6 +50,7 @@ export async function PATCH(req: Request) {
         status: body.status,
         budget: body.budget,
         description: body.description,
+        threshold_date: body.threshold_date,
       },
       include: {
         client: true, // Incluye la información del cliente relacionado
@@ -93,6 +94,7 @@ export async function POST(req: Request) {
         budget: body.budget,
         description: body.description,
         clientId: body.clientId,
+        threshold_date: body.threshold_date,
       },
       include: {
         client: true, // Incluye la información del cliente relacionado

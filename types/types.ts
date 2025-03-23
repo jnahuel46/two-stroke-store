@@ -13,6 +13,7 @@ export interface RepairDetail {
   budget: string;
   description: string;
   clientId: number;
+  threshold_date?: string;
 }
 
 export interface Repair {
@@ -23,4 +24,5 @@ export interface Repair {
   description: string;
   clientId: number;
   client: Client;
+  threshold_date?: string;
 }
