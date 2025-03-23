@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // Obtener la fecha actual y formatearla a DD/MM/YYYY con ceros a la izquierda
     const today = new Date();
