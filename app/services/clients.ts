@@ -11,7 +11,7 @@ export const getClients = async () => {
   return response.json();
 };
 
-export const addClient = async (client: Omit<Client, "id" | "repairs">) => {
+export const addClient = async (client: Omit<Client, "id" | "repairs" | "userId">) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/clients`,
     {

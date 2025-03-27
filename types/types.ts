@@ -2,8 +2,9 @@ export interface Client {
   id: number;
   name: string;
   phone: string;
-  repairs?: Repair[];
   email: string;
+  userId: number;
+  repairs?: Repair[];
 }
 
 export interface RepairDetail {

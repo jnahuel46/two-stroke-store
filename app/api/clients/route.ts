@@ -1,10 +1,23 @@
 import { prisma } from "@/lib/prismaConfig";
 import { NextResponse } from "next/server";
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const clients = await prisma.client.findMany({
+      where: {
+        userId: parseInt(session.user.id),
+      },
       include: {
         repairs: true,
       },
@@ -24,6 +37,15 @@ export async function GET() {
 
 export async function POST(req: Request): Promise<NextResponse> {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
 
     // Validación básica de datos
@@ -34,9 +56,10 @@ export async function POST(req: Request): Promise<NextResponse> {
       );
     }
 
-    // Verificar si el cliente ya existe (por email o teléfono)
+    // Verificar si el cliente ya existe (por email o teléfono) para este usuario
     const existingClient = await prisma.client.findFirst({
       where: {
+        userId: parseInt(session.user.id),
         OR: [{ email: body.email }, { phone: body.phone }],
       },
     });
@@ -54,6 +77,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         name: body.name,
         email: body.email,
         phone: body.phone,
+        userId: parseInt(session.user.id),
       },
     });
 
@@ -71,6 +95,15 @@ export async function POST(req: Request): Promise<NextResponse> {
 
 export async function PATCH(req: Request): Promise<NextResponse> {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
 
     // Validación básica de datos
@@ -81,10 +114,11 @@ export async function PATCH(req: Request): Promise<NextResponse> {
       );
     }
 
-    // Verificar si el cliente existe
-    const existingClient = await prisma.client.findUnique({
+    // Verificar si el cliente existe y pertenece al usuario
+    const existingClient = await prisma.client.findFirst({
       where: {
         id: body.id,
+        userId: parseInt(session.user.id),
       },
     });
 
@@ -121,6 +155,15 @@ export async function PATCH(req: Request): Promise<NextResponse> {
 
 export async function DELETE(req: Request): Promise<NextResponse> {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
 
     // Validación básica de datos
@@ -131,10 +174,11 @@ export async function DELETE(req: Request): Promise<NextResponse> {
       );
     }
 
-    // Verificar si el cliente existe
-    const existingClient = await prisma.client.findUnique({
+    // Verificar si el cliente existe y pertenece al usuario
+    const existingClient = await prisma.client.findFirst({
       where: {
         id: body.id,
+        userId: parseInt(session.user.id),
       },
     });
 

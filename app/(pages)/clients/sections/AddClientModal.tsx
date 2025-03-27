@@ -11,7 +11,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 interface AddClientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (client: Omit<Client, 'id' | 'repairs'>) => void;
+  onAdd: (client: Omit<Client, 'id' | 'repairs' | 'userId'>) => void;
 }
 
 export function AddClientModal({ isOpen, onClose, onAdd }: AddClientModalProps) {

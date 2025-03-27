@@ -1,11 +1,25 @@
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/options";
 
 const prisma = new PrismaClient();
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const repairs = await prisma.repair.findMany({
+      where: {
+        userId: parseInt(session.user.id),
+      },
       include: {
         client: true, // Incluye la información del cliente relacionado
       },
@@ -68,6 +82,15 @@ export async function PATCH(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "No autorizado" },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
 
     // Validación básica de datos
@@ -75,10 +98,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'ID de cliente es requerido' }, { status: 400 });
     }
 
-    // Verificar si el cliente existe
+    // Verificar si el cliente existe y pertenece al usuario
     const existingClient = await prisma.client.findFirst({
       where: {
         id: body.clientId,
+        userId: parseInt(session.user.id),
       },
     });
 
@@ -95,6 +119,7 @@ export async function POST(req: Request) {
         description: body.description,
         clientId: body.clientId,
         threshold_date: body.threshold_date,
+        userId: parseInt(session.user.id),
       },
       include: {
         client: true, // Incluye la información del cliente relacionado

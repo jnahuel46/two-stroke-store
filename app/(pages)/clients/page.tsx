@@ -11,13 +11,13 @@ import { toast } from "sonner";
 
 export default function ClientManagement() {
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
-  const queryClient = useQueryClient(); // Usa useQueryClient en lugar de crear un nuevo QueryClient
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: addClient,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["clients"] }); // Invalida cache
-      setIsModalAddOpen(false); // Cierra modal
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      setIsModalAddOpen(false);
 
       toast.success("Cliente agregado con éxito", {
         description: `Nombre: ${data.name}, Email: ${data.email}`,
@@ -31,7 +31,7 @@ export default function ClientManagement() {
     },
   });
 
-  const handleAddClient = (client: Omit<Client, "id" | "repairs">) => {
+  const handleAddClient = (client: Omit<Client, "id" | "repairs" | "userId">) => {
     mutation.mutate(client);
   };
 
