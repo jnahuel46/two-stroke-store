@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Description } from "@radix-ui/react-dialog";
+import { useEffect } from "react";
 
 interface RepairDetailsModalProps {
   isOpen: boolean;
@@ -41,13 +42,16 @@ export function RepairDetailsModal({
   client,
 }: RepairDetailsModalProps) {
   const repairDetails: RepairDetail[] = client?.repairs || [];
-
+  
   const queryClient = useQueryClient();
-  const { control, handleSubmit } = useForm<{ repairs: RepairDetail[] }>({
-    defaultValues: {
-      repairs: repairDetails,
-    },
-  });
+  const { control, handleSubmit, reset } = useForm<{ repairs: RepairDetail[] }>();
+  
+  // Importante: Resetear el formulario cuando cambia el cliente o se abre el modal
+  useEffect(() => {
+    if (isOpen && client) {
+      reset({ repairs: repairDetails });
+    }
+  }, [isOpen, client, reset, repairDetails]);
 
   const editRepairMutation = useMutation({
     mutationFn: editRepair,
@@ -173,7 +177,7 @@ export function RepairDetailsModal({
                       )}
                     />
                   </TableCell>
-                   {/* Columna Presupuesto */}
+                   {/* Columna Fecha Revisión */}
                   <TableCell>
                     <Controller
                       name={`repairs.${index}.threshold_date`}
