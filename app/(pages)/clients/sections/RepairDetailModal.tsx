@@ -23,12 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editRepair } from "@/app/services/repairs";
+import { deleteRepair, editRepair } from "@/app/services/repairs";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Description } from "@radix-ui/react-dialog";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { Trash2 } from "lucide-react";
 
 interface RepairDetailsModalProps {
   isOpen: boolean;
@@ -41,11 +42,13 @@ export function RepairDetailsModal({
   onClose,
   client,
 }: RepairDetailsModalProps) {
-  const repairDetails: RepairDetail[] = client?.repairs || [];
-  
+  const repairDetails = useMemo(() => client?.repairs || [], [client?.repairs]);
+
   const queryClient = useQueryClient();
-  const { control, handleSubmit, reset } = useForm<{ repairs: RepairDetail[] }>();
-  
+  const { control, handleSubmit, reset } = useForm<{
+    repairs: RepairDetail[];
+  }>();
+
   // Importante: Resetear el formulario cuando cambia el cliente o se abre el modal
   useEffect(() => {
     if (isOpen && client) {
@@ -67,6 +70,19 @@ export function RepairDetailsModal({
     },
   });
 
+  const deleteRepairMutation = useMutation({
+    mutationFn: deleteRepair,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+      toast.success("Reparación eliminada con éxito");
+    },
+    onError: (error) => {
+      toast.error("Error al eliminar la reparación", {
+        description: `Error: ${error}`,
+      });
+    },
+  });
+
   const onSubmit = async (data: { repairs: RepairDetail[] }) => {
     try {
       for (const repair of data.repairs) {
@@ -79,9 +95,23 @@ export function RepairDetailsModal({
     }
   };
 
+  const handleDeleteRepair = async (repairId: number | undefined) => {
+    if (!repairId) return;
+    if (
+      window.confirm("¿Estás seguro de que deseas eliminar esta reparación?")
+    ) {
+      try {
+        await deleteRepairMutation.mutate(repairId);
+        onClose();
+      } catch (error) {
+        console.error(`Error al eliminar la reparación: ${error}`);
+      }
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Detalles de Arreglos - {client?.name}</DialogTitle>
           <Description>Modifica el estado de los arreglos</Description>
@@ -96,6 +126,7 @@ export function RepairDetailsModal({
                 <TableHead>Presupuesto</TableHead>
                 <TableHead>Descripción</TableHead>
                 <TableHead>Fecha Revision</TableHead>
+                <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -177,7 +208,7 @@ export function RepairDetailsModal({
                       )}
                     />
                   </TableCell>
-                   {/* Columna Fecha Revisión */}
+                  {/* Columna Fecha Revisión */}
                   <TableCell>
                     <Controller
                       name={`repairs.${index}.threshold_date`}
@@ -190,6 +221,18 @@ export function RepairDetailsModal({
                         />
                       )}
                     />
+                  </TableCell>
+                  {/* Nueva columna de acciones */}
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-100"
+                      onClick={() => handleDeleteRepair(repair.id)}
+                      type="button"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

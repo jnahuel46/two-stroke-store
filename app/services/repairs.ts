@@ -49,10 +49,31 @@ export const addRepair = async (repair: RepairDetail) => {
   return response.json();
 }
 
-export const getRepairsbyDate = async () => {
+export const getRepairsbyDate = async (from?: Date, to?: Date) => {
+  // Si no se proporcionan fechas, usar el mes actual
+  const startDate = from || new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  const endDate = to || new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs-by`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs-by?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+
+export const deleteRepair = async (id: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    }
   );
 
   if (!response.ok) {
