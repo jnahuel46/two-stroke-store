@@ -19,9 +19,9 @@ export function RepairStatsCards() {
 
   if (isLoading) {
     return (
-      <div className="flex gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full max-w-4xl">
         {[1, 2, 3].map((i) => (
-          <Card key={i} className="w-48 h-24 animate-pulse">
+          <Card key={i} className="w-full h-24 animate-pulse">
             <CardContent className="p-3">
               <div className="h-4 bg-gray-200 rounded mb-2"></div>
               <div className="h-6 bg-gray-200 rounded"></div>
@@ -57,18 +57,18 @@ export function RepairStatsCards() {
   ];
 
   return (
-    <div className="flex gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full max-w-4xl px-4 sm:px-0">
       {statsData.map((stat) => (
-        <Card key={stat.title} className={`w-48 ${stat.bgColor}`}>
-          <CardHeader className="pb-3 pt-4 px-4">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+        <Card key={stat.title} className={`w-full ${stat.bgColor}`}>
+          <CardHeader className="pb-2 pt-3 px-3 sm:pb-3 sm:pt-4 sm:px-4">
+            <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground">
               {stat.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <div className="flex items-center gap-3">
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
-              <div className={`text-2xl font-bold ${stat.color}`}>
+          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <stat.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${stat.color}`} />
+              <div className={`text-xl sm:text-2xl font-bold ${stat.color}`}>
                 {stat.value}
               </div>
             </div>

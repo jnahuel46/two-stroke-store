@@ -15,7 +15,7 @@ export default function RepairsPage() {
   if (error) return <p>Error</p>;
   return (
     <div className="mt-12">
-      <div className="mb-6 flex justify-center">
+      <div className="mb-6 flex justify-center w-full">
         <RepairStatsCards />
       </div>
       <RepairsTable repairs={data} title="Tabla de Arreglos"/>
