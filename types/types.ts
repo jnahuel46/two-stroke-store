@@ -2,7 +2,7 @@ export interface Client {
   id: number;
   name: string;
   phone: string;
-  email: string;
+  email: string | null;
   userId: number;
   repairs?: Repair[];
 }

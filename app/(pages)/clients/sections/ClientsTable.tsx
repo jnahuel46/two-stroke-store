@@ -8,8 +8,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2, Edit, Plus } from "lucide-react";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Trash2, Edit, Plus, Search, ArrowUpDown } from "lucide-react";
+import { useState, useMemo } from "react";
 import { Client } from "@/types/types";
 import { RepairDetailsModal } from "./RepairDetailModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,13 +29,35 @@ export function ClientTable() {
     queryFn: getClients,
   });
 
-  const clients: Client[] = data || [];
-
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [isRepairModalOpen, setIsRepairModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddRepairModalOpen, setIsAddRepairModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const filteredClients = useMemo(() => {
+    const clients: Client[] = data || [];
+    let filtered = clients;
+
+    if (searchTerm) {
+      filtered = clients.filter(client =>
+        client.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Sort by name
+    return filtered.sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      if (sortOrder === "asc") {
+        return nameA.localeCompare(nameB);
+      } else {
+        return nameB.localeCompare(nameA);
+      }
+    });
+  }, [data, searchTerm, sortOrder]);
 
   const handleOpenRepairModal = (client: Client) => {
     setSelectedClient(client);
@@ -81,10 +104,30 @@ export function ClientTable() {
 
   return (
     <>
+      <div className="mb-4">
+        <div className="relative">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar cliente por nombre..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8"
+          />
+        </div>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nombre</TableHead>
+            <TableHead>
+              <Button
+                variant="ghost"
+                onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                className="h-auto p-0 font-medium"
+              >
+                Nombre
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            </TableHead>
             <TableHead>Teléfono</TableHead>
             <TableHead>Arreglos</TableHead>
             <TableHead>Email</TableHead>
@@ -92,7 +135,7 @@ export function ClientTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients.map((client) => (
+          {filteredClients.map((client) => (
             <TableRow key={client.id}>
               <TableCell>{client.name}</TableCell>
               <TableCell>{client.phone}</TableCell>
@@ -104,7 +147,7 @@ export function ClientTable() {
                   {client?.repairs?.length || 0}
                 </Button>
               </TableCell>
-              <TableCell>{client.email}</TableCell>
+              <TableCell>{client.email || "N/A"}</TableCell>
               <TableCell className="flex gap-2">
                 <Button
                   variant="ghost"

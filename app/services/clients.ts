@@ -1,4 +1,4 @@
-import { Client } from "@prisma/client";
+import { Client } from "@/types/types";
 
 export const getClients = async () => {
   const response = await fetch(
@@ -67,3 +67,14 @@ export const deleteClient = async (id: number) => {
   }
   return response.json();
 }
+
+export const getRepairStats = async () => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/repairs/stats`
+  );
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};

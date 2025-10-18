@@ -35,14 +35,14 @@ export function EditClientModal({
     if (client) {
       setName(client.name);
       setPhone(client.phone);
-      setEmail(client.email);
+      setEmail(client.email || "");
     }
   }, [client]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (client) {
-      onEdit({ ...client, name, phone, email });
+      onEdit({ ...client, name, phone, email: email || null });
     }
     onClose();
   };
@@ -82,7 +82,7 @@ export function EditClientModal({
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="edit-email" className="text-right">
-                Email
+                Email <span className="text-muted-foreground">(opcional)</span>
               </Label>
               <Input
                 id="edit-email"

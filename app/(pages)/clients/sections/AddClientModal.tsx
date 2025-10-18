@@ -21,7 +21,7 @@ export function AddClientModal({ isOpen, onClose, onAdd }: AddClientModalProps) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onAdd({ name, phone, email })
+    onAdd({ name, phone, email: email || null })
     onClose()
     setName("")
     setPhone("")
@@ -51,7 +51,7 @@ export function AddClientModal({ isOpen, onClose, onAdd }: AddClientModalProps) 
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="email" className="text-right">
-                Email
+                Email <span className="text-muted-foreground">(opcional)</span>
               </Label>
               <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="col-span-3" />
             </div>

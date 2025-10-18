@@ -49,18 +49,23 @@ export async function POST(req: Request): Promise<NextResponse> {
     const body = await req.json();
 
     // Validación básica de datos
-    if (!body.name || !body.email || !body.phone) {
+    if (!body.name || !body.phone) {
       return NextResponse.json(
-        { error: "Todos los campos son requeridos" },
+        { error: "Nombre y teléfono son requeridos" },
         { status: 400 }
       );
     }
 
     // Verificar si el cliente ya existe (por email o teléfono) para este usuario
+    const whereConditions: Array<{ phone?: string; email?: string }> = [{ phone: body.phone }];
+    if (body.email) {
+      whereConditions.push({ email: body.email });
+    }
+
     const existingClient = await prisma.client.findFirst({
       where: {
         userId: parseInt(session.user.id),
-        OR: [{ email: body.email }, { phone: body.phone }],
+        OR: whereConditions,
       },
     });
 
@@ -75,7 +80,7 @@ export async function POST(req: Request): Promise<NextResponse> {
     const client = await prisma.client.create({
       data: {
         name: body.name,
-        email: body.email,
+        email: body.email || null,
         phone: body.phone,
         userId: parseInt(session.user.id),
       },
@@ -107,9 +112,9 @@ export async function PATCH(req: Request): Promise<NextResponse> {
     const body = await req.json();
 
     // Validación básica de datos
-    if (!body.id || !body.name || !body.email || !body.phone) {
+    if (!body.id || !body.name || !body.phone) {
       return NextResponse.json(
-        { error: "Todos los campos son requeridos" },
+        { error: "ID, nombre y teléfono son requeridos" },
         { status: 400 }
       );
     }
@@ -136,7 +141,7 @@ export async function PATCH(req: Request): Promise<NextResponse> {
       },
       data: {
         name: body.name,
-        email: body.email,
+        email: body.email || null,
         phone: body.phone,
       },
     });
